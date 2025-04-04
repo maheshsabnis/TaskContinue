@@ -6,6 +6,8 @@
         {
             FileOperations operations = new FileOperations();
             Console.WriteLine("DEMO Task Continue With");
+            //CancellationTokenSource cts = new CancellationTokenSource();
+            //CancellationToken token = cts.Token;
             try
             {
                 Task task = Task.Factory.StartNew<string>(() =>
@@ -16,11 +18,12 @@
                         Console.WriteLine(fileContent);
                         return fileContent;
                     }
-                    catch (AggregateException ex)
+                    catch (Exception ex)
                     {
+                       // cts.Cancel();   
                         throw ex;
                     }
-                }).ContinueWith(t =>
+                }/*, token*/ ).ContinueWith(t =>
                 {
                     try
                     {
@@ -28,7 +31,7 @@
                         {
                             throw t.Exception;
                         }
-                        else
+                        else /*if (!token.IsCancellationRequested)*/
                         {
                             var result = operations.WriteFile(@"e:\file2.txt", t.Result);
                             if (result)
@@ -45,7 +48,7 @@
                     {
                         Console.WriteLine($"Error Occurred in Task {ex.Message}");
                     }
-                });
+                }/*,token*/);
             }
             catch (Exception ex)
             {
