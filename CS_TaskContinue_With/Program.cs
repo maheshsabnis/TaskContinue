@@ -16,7 +16,7 @@
                         Console.WriteLine(fileContent);
                         return fileContent;
                     }
-                    catch (Exception ex)
+                    catch (AggregateException ex)
                     {
                         throw ex;
                     }
